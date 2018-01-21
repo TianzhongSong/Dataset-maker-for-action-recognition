@@ -3,6 +3,13 @@
 
 #使用[SSD](https://github.com/rykov8/ssd_keras)检测人体
 
+## requirements
+keras2.10+
+
+tensorflow1.4+
+
+opencv3.2+
+
 ## 说明
 1、将变量action_class设置为待采类别；
 
