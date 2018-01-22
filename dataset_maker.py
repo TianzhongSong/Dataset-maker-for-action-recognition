@@ -10,7 +10,7 @@ import os
 
 def run_camera(input_shape, model, save_path, frame_number):
     num_classes = 21
-    conf_thresh = 0.5
+    conf_thresh = 0.4
     bbox_util = BBoxUtility(num_classes)
 
     class_colors = []
@@ -95,21 +95,21 @@ def run_camera(input_shape, model, save_path, frame_number):
                         if len(image_stack) == frame_number:
                             image_stack.pop(0)
                             image_stack.append(frame[ymin:ymax, xmin:xmax, :])
-                cv2.imshow("SSD result", orig_image)
-                if cv2.waitKey(5) & 0xFF == ord('q'):
-                    break
-                elif cv2.waitKey(5) & 0xFF == ord('s'):
-                    if len(image_stack) == frame_number:
-                        if not os.path.exists(save_path+str(sample_count+1)):
-                            os.mkdir(save_path+str(sample_count+1))
-                        for pic in range(frame_number):
-                            cv2.imwrite(save_path+str(sample_count+1)+'/' +
-                                        str(1000+pic)+'.jpg', image_stack[pic])
-                            print('saving ' + save_path+str(sample_count+1)+'/' +
-                                        str(1000+pic)+'.jpg')
-                        image_stack = []
-                        empty_count = 0
-                        sample_count += 1
+        cv2.imshow("SSD result", orig_image)
+        if cv2.waitKey(5) & 0xFF == ord('q'):
+            break
+        elif cv2.waitKey(5) & 0xFF == ord('s'):
+            if len(image_stack) == frame_number:
+                if not os.path.exists(save_path+str(sample_count+1)):
+                    os.mkdir(save_path+str(sample_count+1))
+                for pic in range(frame_number):
+                    cv2.imwrite(save_path+str(sample_count+1)+'/' +
+                                str(1000+pic)+'.jpg', image_stack[pic])
+                    print('saving ' + save_path+str(sample_count+1)+'/' +
+                                str(1000+pic)+'.jpg')
+                image_stack = []
+                empty_count = 0
+                sample_count += 1
 
 
 if __name__ == '__main__':
