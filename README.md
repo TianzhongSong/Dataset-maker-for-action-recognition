@@ -11,6 +11,7 @@ tensorflow1.4+
 opencv3.2+
 
 ## 说明
+运行主程序：dataset_maker.py
 1、将变量action_class设置为待采类别；
 
 2、变量save_frames为一个样本的帧长度，也就是说每一个样本是由连续save_frames帧的图片所组成，
