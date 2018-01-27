@@ -96,9 +96,7 @@ def run_camera(input_shape, model, save_path, frame_number):
                             image_stack.pop(0)
                             image_stack.append(frame[ymin:ymax, xmin:xmax, :])
         cv2.imshow("SSD result", orig_image)
-        if cv2.waitKey(5) & 0xFF == ord('q'):
-            break
-        elif cv2.waitKey(5) & 0xFF == ord('s'):
+        if cv2.waitKey(5) & 0xFF == ord('s'):
             if len(image_stack) == frame_number:
                 if not os.path.exists(save_path+str(sample_count+1)):
                     os.mkdir(save_path+str(sample_count+1))
