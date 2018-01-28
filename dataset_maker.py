@@ -74,6 +74,7 @@ def run_camera(input_shape, model, save_path, frame_number):
                     image_stack = []
                     empty_count = 0
             else:
+                empty_count = 0
                 for i in range(top_conf.shape[0]):
                     xmin = int(round((top_xmin[i] * vidw) * 0.9))
                     ymin = int(round((top_ymin[i] * vidh) * 0.9))
