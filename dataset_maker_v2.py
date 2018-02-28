@@ -101,7 +101,8 @@ def run_camera(input_shape, model, root_path, action_class, frame_number):
                             origin_stack.append(curl)
                         if len(crop_stack) == frame_number:
                             crop_stack.pop(0)
-                            crop_stack.append(frame[ymin:ymax, xmin:xmax, :])
+                            mask = frame[ymin:ymax, xmin:xmax, :]
+                            crop_stack.append(cv2.resize(mask, (320, 240)))
                             origin_stack.pop(0)
                             origin_stack.append(curl)
 
