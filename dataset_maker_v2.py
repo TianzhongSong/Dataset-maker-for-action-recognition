@@ -6,6 +6,7 @@ import numpy as np
 from ssd_utils import BBoxUtility
 from ssd import SSD300 as SSD
 import os
+import copy
 
 
 def run_camera(input_shape, model, root_path, action_class, frame_number):
@@ -14,7 +15,7 @@ def run_camera(input_shape, model, root_path, action_class, frame_number):
     bbox_util = BBoxUtility(num_classes)
 
     class_colors = []
-    for i in range(0,num_classes):
+    for i in range(0, num_classes):
         hue = 255 * i / num_classes
         col = np.zeros((1, 1, 3)).astype("uint8")
         col[0][0][0] = hue
@@ -32,11 +33,13 @@ def run_camera(input_shape, model, root_path, action_class, frame_number):
     # vidar = vidw / vidh
     crop_path = root_path + 'crop/' + action_class
     origin_path = root_path + 'origin/' + action_class
+    mask_path = root_path + 'mask/' + action_class
     samples = os.listdir(origin_path)
     sample_count = len(samples)
     empty_count = 0
     crop_stack = []
     origin_stack = []
+    mask_stack = []
     while True:
         retval, orig_image = vid.read()
         if not retval:
@@ -76,6 +79,7 @@ def run_camera(input_shape, model, root_path, action_class, frame_number):
                 if empty_count == 4:
                     crop_stack = []
                     origin_stack = []
+                    mask_stack = []
                     empty_count = 0
             else:
                 for i in range(top_conf.shape[0]):
@@ -91,56 +95,73 @@ def run_camera(input_shape, model, root_path, action_class, frame_number):
                     # save frames
                     class_num = int(top_label_indices[i])
                     if class_num == 15:
+                        frame = copy.deepcopy(orig_image)
                         cv2.rectangle(orig_image, (xmin, ymin), (xmax, ymax),
                                       class_colors[class_num], 2)
-                        frame = orig_image
+                        # frame = copy.deepcopy(orig_image)
+                        # frame = np.zeros_like(orig_image, dtype='uint8')
+                        # frame[:,:,:] = orig_image[:,:,:]
                         curl = np.zeros_like(frame, dtype='uint8')
                         curl[ymin:ymax, xmin:xmax, :] = frame[ymin:ymax, xmin:xmax, :]
+                        curl = cv2.resize(curl, (160, 120))
+                        frame = cv2.resize(frame, (160, 120))
                         if len(crop_stack) < frame_number:
-                            crop_stack.append(frame[ymin:ymax, xmin:xmax, :])
-                            origin_stack.append(curl)
+                            crop_stack.append(cv2.resize(frame[ymin:ymax, xmin:xmax, :], (64, 96)))
+                            origin_stack.append(frame)
+                            mask_stack.append(curl)
                         if len(crop_stack) == frame_number:
                             crop_stack.pop(0)
-                            mask = frame[ymin:ymax, xmin:xmax, :]
-                            crop_stack.append(cv2.resize(mask, (320, 240)))
+                            crop_stack.append(frame[ymin:ymax, xmin:xmax, :])
                             origin_stack.pop(0)
-                            origin_stack.append(curl)
+                            origin_stack.append(frame)
+                            mask_stack.append(curl)
 
         cv2.imshow("SSD result", orig_image)
         if cv2.waitKey(5) & 0xFF == ord('s'):
             if len(crop_stack) == frame_number:
-                if not os.path.exists(crop_path + '/' + str(sample_count+1)):
-                    os.mkdir(crop_path + '/' + str(sample_count+1))
-                if not os.path.exists(origin_path + '/' + str(sample_count+1)):
-                    os.mkdir(origin_path + '/' + str(sample_count+1))
+                if not os.path.exists(crop_path + '/' + str(sample_count + 1)):
+                    os.mkdir(crop_path + '/' + str(sample_count + 1))
+                if not os.path.exists(origin_path + '/' + str(sample_count + 1)):
+                    os.mkdir(origin_path + '/' + str(sample_count + 1))
+                if not os.path.exists(mask_path + '/' + str(sample_count + 1)):
+                    os.mkdir(mask_path + '/' + str(sample_count + 1))
                 for pic in range(frame_number):
-                    cv2.imwrite(crop_path + '/' + str(sample_count+1)+'/' +
-                                str(1000+pic)+'.jpg', crop_stack[pic])
-                    print('saving ' + crop_path + '/' + str(sample_count+1)+'/' +
-                                str(1000+pic)+'.jpg')
+                    cv2.imwrite(crop_path + '/' + str(sample_count + 1) + '/' +
+                                str(1000 + pic) + '.jpg', crop_stack[pic])
+                    print('saving ' + crop_path + '/' + str(sample_count + 1) + '/' +
+                          str(1000 + pic) + '.jpg')
                     cv2.imwrite(origin_path + '/' + str(sample_count + 1) + '/' +
                                 str(1000 + pic) + '.jpg', origin_stack[pic])
                     print('saving ' + origin_path + '/' + str(sample_count + 1) + '/' +
                           str(1000 + pic) + '.jpg')
+                    cv2.imwrite(mask_path + '/' + str(sample_count + 1) + '/' +
+                                str(1000 + pic) + '.jpg', mask_stack[pic])
+                    print('saving ' + mask_path + '/' + str(sample_count + 1) + '/' +
+                          str(1000 + pic) + '.jpg')
                 crop_stack = []
                 origin_stack = []
+                mask_stack = []
                 empty_count = 0
                 sample_count += 1
 
 
 if __name__ == '__main__':
-    action_class = 'stand/'
+    action_class = 'sit/'
     root_path = '/home/dl1/datasets/action/'
     if not os.path.exists(root_path + 'crop/'):
         os.mkdir(root_path + 'crop/')
     if not os.path.exists(root_path + 'origin/'):
         os.mkdir(root_path + 'origin/')
+    if not os.path.exists(root_path + 'mask/'):
+        os.mkdir(root_path + 'mask/')
 
-    save_path = root_path+action_class
+    save_path = root_path + action_class
     if not os.path.exists(root_path + 'crop/' + action_class):
         os.mkdir(root_path + 'crop/' + action_class)
     if not os.path.exists(root_path + 'origin/' + action_class):
         os.mkdir(root_path + 'origin/' + action_class)
+    if not os.path.exists(root_path + 'mask/' + action_class):
+        os.mkdir(root_path + 'mask/' + action_class)
 
     save_frames = 30
     input_shape = (300, 300, 3)
