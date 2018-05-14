@@ -1,5 +1,28 @@
 # Dataset-maker-for-action-recognition
+
 用于制作人体行为识别数据库的程序
+
+----------------------Update openpose---------------------------------
+
+采用[openpose](https://github.com/CMU-Perceptual-Computing-Lab/openpose)获取人体关节点信息，并将骨骼图保存下来。我使用的是这个[openpose加速版](https://github.com/ildoonet/tf-pose-estimation)
+
+run:
+
+    ./pose/models/pretrained/mobilenet_v1_0.75_224_2017_06_14/download.sh
+  
+    python run_cam.py
+  
+保存的关节点信息：共有18个关节点信息，使用[run_cam.py](https://github.com/TianzhongSong/Dataset-maker-for-action-recognition/blob/master/run_cam.py) 保存每一帧各个关节点的坐标以及每一帧对应的骨骼图。
+
+结果如下：
+
+![](https://github.com/TianzhongSong/Dataset-maker-for-action-recognition/blob/master/imgs/joints.png)
+
+![](https://github.com/TianzhongSong/Dataset-maker-for-action-recognition/blob/master/imgs/1000.jpg)
+
+![](https://github.com/TianzhongSong/Dataset-maker-for-action-recognition/blob/master/imgs/imgs.png)
+
+----------------------Prevous Version----------------------------------
 
 #使用[SSD（含权重文件）](https://github.com/rykov8/ssd_keras)检测人体
 
