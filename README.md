@@ -12,7 +12,7 @@ run:
   
     python run_cam.py
   
-保存的关节点信息：共有18个关节点信息，使用[run_cam.py](https://github.com/TianzhongSong/Dataset-maker-for-action-recognition/blob/master/run_cam.py) 保存每一帧各个关节点的坐标以及每一帧对应的骨骼图。
+保存的关节点信息：共有18个关节点信息，使用[run_cam.py](https://github.com/TianzhongSong/Dataset-maker-for-action-recognition/blob/master/run_cam.py) 保存每一帧各个关节点的序号及其坐标，以及每一帧对应的骨骼图。
 
 结果如下：
 
