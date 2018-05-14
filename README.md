@@ -10,8 +10,10 @@ run:
 
     ./pose/models/pretrained/mobilenet_v1_0.75_224_2017_06_14/download.sh
   
-    python run_cam.py
-  
+    python run_cam.py
+
+运行过程中， 按‘s’键保存信息，按‘q’键退出。
+
 保存的关节点信息：共有18个关节点信息，使用[run_cam.py](https://github.com/TianzhongSong/Dataset-maker-for-action-recognition/blob/master/run_cam.py) 保存每一帧各个关节点的序号及其坐标，以及每一帧对应的骨骼图。
 
 结果如下：
