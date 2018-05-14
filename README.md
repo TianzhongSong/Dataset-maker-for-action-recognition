@@ -9,8 +9,8 @@
 run:
 
     ./pose/models/pretrained/mobilenet_v1_0.75_224_2017_06_14/download.sh
-  
-    python run_cam.py
+    
+    python run_cam.py
 
 运行过程中， 按‘s’键保存信息，按‘q’键退出。
 
