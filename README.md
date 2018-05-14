@@ -24,7 +24,7 @@ run:
 
 ![](https://github.com/TianzhongSong/Dataset-maker-for-action-recognition/blob/master/imgs/imgs.png)
 
-----------------------Prevous Version----------------------------------
+----------------------Previous Version----------------------------------
 
 #使用[SSD（含权重文件）](https://github.com/rykov8/ssd_keras)检测人体
 
