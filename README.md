@@ -6,7 +6,7 @@
 
 Get human joint information using [openpose](https://github.com/CMU-Perceptual-Computing-Lab/openpose), in this demo I use [TensorFlow implementation](https://github.com/ildoonet/tf-pose-estimation)
 
-[This implementation] is trained with [COCO](http://mscoco.org/), there are 18 joints of a person.
+[This implementation](https://github.com/ildoonet/tf-pose-estimation) is trained with [COCO](http://mscoco.org/), there are 18 joints of a person.
 
     Nose = 0
     Neck = 1
