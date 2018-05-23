@@ -1,22 +1,43 @@
 # Dataset-maker-for-action-recognition
 
-用于制作人体行为识别数据库的程序
+----------------------Using openpose---------------------------------
 
-----------------------Update openpose---------------------------------
+## Attention：There can be only one person in the field of vision.
 
-采用[openpose](https://github.com/CMU-Perceptual-Computing-Lab/openpose)获取人体关节点信息，并将骨骼图保存下来。我使用的是这个[openpose加速版](https://github.com/ildoonet/tf-pose-estimation)
+Get human joint information using [openpose](https://github.com/CMU-Perceptual-Computing-Lab/openpose), in this demo I use [TensorFlow implementation](https://github.com/ildoonet/tf-pose-estimation)
 
-run:
+[This implementation] is trained with [COCO](http://mscoco.org/), there are 18 joints of a person.
+
+    Nose = 0
+    Neck = 1
+    RShoulder = 2
+    RElbow = 3
+    RWrist = 4
+    LShoulder = 5
+    LElbow = 6
+    LWrist = 7
+    RHip = 8
+    RKnee = 9
+    RAnkle = 10
+    LHip = 11
+    LKnee = 12
+    LAnkle = 13
+    REye = 14
+    LEye = 15
+    REar = 16
+    LEar = 17
+
+![](https://github.com/TianzhongSong/Dataset-maker-for-action-recognition/blob/master/imgs/sksk.jpg)
+
+## run
 
     ./pose/models/pretrained/mobilenet_v1_0.75_224_2017_06_14/download.sh
     
     python run_cam.py
 
-运行过程中， 按‘s’键保存信息，按‘q’键退出。
+Press 's' to save joint information and joint images during running, press 'q' to quit.
 
-保存的关节点信息：共有18个关节点信息，使用[run_cam.py](https://github.com/TianzhongSong/Dataset-maker-for-action-recognition/blob/master/run_cam.py) 保存每一帧各个关节点的序号及其坐标，以及每一帧对应的骨骼图。
-
-结果如下：
+The default camera resolution is 640x480, the format of saved joint is t_x_y, where 't' indicates the number of joint, 'x' indicates the horizontal location of joint on the image, 'y' indicates the vertical location of joint on the image.
 
 ![](https://github.com/TianzhongSong/Dataset-maker-for-action-recognition/blob/master/imgs/joints.png)
 
@@ -24,25 +45,17 @@ run:
 
 ![](https://github.com/TianzhongSong/Dataset-maker-for-action-recognition/blob/master/imgs/imgs.png)
 
-----------------------Previous Version----------------------------------
 
-#使用[SSD（含权重文件）](https://github.com/rykov8/ssd_keras)检测人体
+----------------------Using SSD----------------------------------
+## Attention：There can be only one person in the field of vision.
 
-## requirements
-keras2.10+
+#Using [SSD](https://github.com/rykov8/ssd_keras) to detect person then save person crop image.
 
-tensorflow1.4+
+## run 
+    python dataset_maker.py
 
-opencv3.2+
+Press 's' to save frames.
 
-## 说明
-运行主程序：dataset_maker.py
+samples:
 
-1、将变量action_class设置为待采类别；
-
-2、变量save_frames为一个样本的帧长度，也就是说每一个样本是由连续save_frames帧的图片所组成，
-每一个样本都单独保存在一个文件夹中；
-
-3、在采集过程中在摄像头窗口按‘s’键即保存当前图片。
-
-知乎文章：[一个制作带bbox的行为识别数据库的程序](https://zhuanlan.zhihu.com/p/33365628)
+![](https://github.com/TianzhongSong/Dataset-maker-for-action-recognition/blob/master/imgs/walk.jpg)
